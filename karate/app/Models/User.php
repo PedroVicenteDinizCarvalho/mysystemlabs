@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'age',
+        'gender',
+        'graduate',
+        'picture',
+        'type-of-fight',
+        'user-type'
     ];
 
     /**
@@ -41,4 +47,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function training()
+    {
+        return $this->hasOne(Training::class, 'teacher_id');
+    }
+
+    public function trainings()
+    {
+        return $this->belongsToMany(Training::class, 'training_users', 'user_id', 'training_id');
+    }
 }
