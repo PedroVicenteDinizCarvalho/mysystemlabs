@@ -100,6 +100,7 @@ class TrainingController extends Controller
     {
         //VERIFICA SE EXISTE TREINO NO MESMO HORÁRIO
         $training = Training::compareTrainingSchedules($request->date_and_time, $request->end_training);
+        
         if($training->count() == 0){
             $request->validate([
                 'name' => 'required|string|max:255',
@@ -112,14 +113,24 @@ class TrainingController extends Controller
             ]);
     
             $data = $request->all();
-            Training::find($id)->update($data);
+            $training_changed = Training::find($id)->update($data);
     
             //VERIFICA SE EXISTEM ALUNOS MATRICULADOS
             $listTrainingUsers = TrainingUser::listTrainingUsers($id);
             if($listTrainingUsers->count() != 0){
                 foreach ($listTrainingUsers as $key => $value) {
                     //Dispara email para os alunos avisando que a aula sofreu alterações
-                    
+                    $details = [
+                        'email_student' => $value->user()->email,
+                        'name_student' => $value->user()->name,
+                        'name_training' => $training_changed->name,
+                        'maximum_students' => $training_changed->maximum_students,
+                        'teacher_name' => $training_changed->teacher_name,
+                        'date_and_time' => $training_changed->date_and_time,
+                        'duration' => $training_changed->duration,
+                        'end_training' => $training_changed->end_training,
+                    ];
+                    \Mail::to($value->user()->email)->send(new \App\Mail\ChangeTraining($details));
                 }
             }
 
