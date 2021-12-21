@@ -16,9 +16,10 @@ class CreateTrainingsTable extends Migration
         Schema::create('trainings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('maximum-students');
-            $table->string('teacher-name');
-            $table->datetime('date-and-time')->unique();
+            $table->integer('maximum_students');
+            $table->string('teacher_name');
+            $table->datetime('date_and_time')->unique();
+            $table->datetime('end_training');
             $table->time('duration');
             $table->unsignedBigInteger('teacher_id');
             $table->timestamps();

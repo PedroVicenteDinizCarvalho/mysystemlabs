@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -25,8 +26,8 @@ class User extends Authenticatable
         'gender',
         'graduate',
         'picture',
-        'type-of-fight',
-        'user-type'
+        'type_of_fight',
+        'user_type'
     ];
 
     /**
@@ -56,5 +57,39 @@ class User extends Authenticatable
     public function trainings()
     {
         return $this->belongsToMany(Training::class, 'training_users', 'user_id', 'training_id');
+    }
+
+    public static function listUserStudents(){
+        $listUsersAdmin = DB::table('users')
+                ->select( 
+                'name',
+                'email',
+                'password',
+                'age',
+                'gender',
+                'graduate',
+                'picture',
+                'type_of_fight',
+                'user_type')
+                ->where('user_type', '=', 'student')
+                ->get();
+        return $listUsersAdmin;
+    }
+
+    public static function listUserTeachers(){
+        $listUsersAdmin = DB::table('users')
+                ->select( 
+                'name',
+                'email',
+                'password',
+                'age',
+                'gender',
+                'graduate',
+                'picture',
+                'type_of_fight',
+                'user_type')
+                ->where('user_type', '=', 'teacher')
+                ->get();
+        return $listUsersAdmin;
     }
 }

@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
-
+                        <!-- NOME DO ALUNO -->
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
@@ -24,7 +24,8 @@
                                 @enderror
                             </div>
                         </div>
-
+                        
+                        <!-- EMAIL PARA LOGIN -->
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
@@ -38,6 +39,55 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <!-- IDADE -->
+                        <div class="row mb-3">
+                            <label for="age" class="col-md-4 col-form-label text-md-right">{{ __('Idade') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="age" type="number" class="form-control @error('age') is-invalid @enderror" name="age" value="{{ old('age') }}" required autocomplete="age">
+
+                                @error('age')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Gênero -->
+                        <div class="row mb-3">
+                            <label for="gender" class="col-md-4 col-form-label text-md-right">{{ __('Gênero') }}</label>
+
+                            <div class="col-md-6">
+                                <select id="gender" class="form-control @error('gender') is-invalid @enderror" name="gender" value="{{ old('gender') }}" required>
+                                    <option value="male">Masculino</option>
+                                    <option value="female">Feminino</option>
+                                </select>
+
+                                @error('gender')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- GRADUAÇÃO NA ARTE MARCIAL -->
+                        <div class="row mb-3">
+                            <label for="graduate" class="col-md-4 col-form-label text-md-right">{{ __('Graduação') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="graduate" type="text" class="form-control @error('graduate') is-invalid @enderror" name="graduate" value="{{ old('graduate') }}" required autocomplete="graduate">
+
+                                @error('graduate')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
 
                         <div class="row mb-3">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>

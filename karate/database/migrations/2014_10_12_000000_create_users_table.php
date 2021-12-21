@@ -23,8 +23,8 @@ class CreateUsersTable extends Migration
             $table->enum('gender', ['male', 'female']);
             $table->string('graduate')->nullable();
             $table->string('picture')->nullable();
-            $table->string('type-of-fight')->nullable();
-            $table->enum('user-type', ['teacher', 'student']);
+            $table->string('type_of_fight')->nullable();
+            $table->enum('user_type', ['teacher', 'student'])->default('student');
             $table->rememberToken();
             $table->timestamps();
         });
