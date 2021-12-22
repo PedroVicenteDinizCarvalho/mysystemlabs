@@ -13,7 +13,7 @@ class TrainingUser extends Model
     protected $fillable = ['user_id', 'training_id'];
 
     public static function listTrainingUsers($training_id){
-        $listUsersAdmin = DB::table('trainingUsers')
+        $listUsersAdmin = DB::table('training_users')
                 ->select( 
                 'user_id',
                 'training_id')
@@ -23,7 +23,7 @@ class TrainingUser extends Model
     }
 
     public static function listUserTrainings($user_id){
-        $listUsersAdmin = DB::table('trainingUsers')
+        $listUsersAdmin = DB::table('training_users')
                 ->select( 
                 'user_id',
                 'training_id')

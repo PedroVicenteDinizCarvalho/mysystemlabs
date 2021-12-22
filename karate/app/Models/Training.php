@@ -22,7 +22,7 @@ class Training extends Model
     ];
 
     public static function listTrainings(){
-        $listUsersAdmin = DB::table('trainings')
+        $listTrainings = DB::table('trainings')
                 ->select( 
                 'name',
                 'maximum_students',
@@ -32,11 +32,11 @@ class Training extends Model
                 'teacher_id',
                 'end_training')
                 ->get();
-        return $listUsersAdmin;
+        return $listTrainings;
     }
 
     public static function listFutureTrainings(){
-        $listUsersAdmin = DB::table('trainings')
+        $listTrainings = DB::table('trainings')
                 ->select( 
                 'name',
                 'maximum_students',
@@ -47,11 +47,11 @@ class Training extends Model
                 'end_training')
                 ->where('date_and_time', '>', date('Y-m-d H:i:s'))
                 ->get();
-        return $listUsersAdmin;
+        return $listTrainings;
     }
 
     public static function listOldTrainings(){
-        $listUsersAdmin = DB::table('trainings')
+        $listTrainings = DB::table('trainings')
                 ->select( 
                 'name',
                 'maximum_students',
@@ -62,11 +62,11 @@ class Training extends Model
                 'end_training')
                 ->where('date_and_time', '<', date('Y-m-d H:i:s'))
                 ->get();
-        return $listUsersAdmin;
+        return $listTrainings;
     }
 
     public static function listPresentTraining(){
-        $listUsersAdmin = DB::table('trainings')
+        $listTrainings = DB::table('trainings')
                 ->select( 
                 'name',
                 'maximum_students',
@@ -75,13 +75,15 @@ class Training extends Model
                 'duration',
                 'teacher_id',
                 'end_training')
-                ->where('date_and_time', '=', date('Y-m-d H:i:s'))
+                ->where('date_and_time', '>=', date('Y-m-d'))
+                ->orderBy('end_training')
+                ->limit(6)
                 ->get();
-        return $listUsersAdmin;
+        return $listTrainings;
     }
 
     public static function compareTrainingSchedules($date_and_time, $end_training){
-        $listUsersAdmin = DB::table('trainings')
+        $listTrainings = DB::table('trainings')
                 ->select( 
                 'name',
                 'maximum_students',
@@ -91,9 +93,25 @@ class Training extends Model
                 'teacher_id',
                 'end_training')
                 ->whereBetween('date_and_time', [$date_and_time, $end_training])
-                ->whereBetween('end_training', [$date_and_time, $end_training])
+                ->orWhereBetween('end_training', [$date_and_time, $end_training])
                 ->get();
-        return $listUsersAdmin;
+        return $listTrainings;
     }
 
+    public static function teacherTraining($id){
+        $listTrainings = DB::table('trainings')
+        ->select( 
+            'id',
+            'name',
+            'maximum_students',
+            'teacher_name',
+            'date_and_time',
+            'duration',
+            'teacher_id',
+            'end_training')
+        ->where('teacher_id', '=', $id)
+        ->orderBy('date_and_time')
+        ->get();
+        return $listTrainings;
+    }
 }

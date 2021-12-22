@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Training;
 use App\Models\TrainingUser;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 
 class TrainingController extends Controller
@@ -40,13 +42,17 @@ class TrainingController extends Controller
     {   
         //VERIFICA SE EXISTE TREINO NO MESMO HORÁRIO
         $training = Training::compareTrainingSchedules($request->date_and_time, $request->end_training);
+    
         if($training->count() == 0){
+            $start = strtotime($request->date_and_time);
+            $end = strtotime($request->end_training);
+            $duration = date( 'H:i:s', abs( $end - $start ) );
+        
             $request->validate([
                 'name' => 'required|string|max:255',
                 'maximum_students' => 'required|integer',
                 'teacher_name' => 'required|string|max:255',
                 'date_and_time' => 'required',
-                'duration' => 'required',
                 'teacher_id' => 'required',
                 'end_training' => 'required',
             ]);
@@ -56,12 +62,12 @@ class TrainingController extends Controller
                 'maximum_students' => $request->maximum_students,
                 'teacher_name' => $request->teacher_name,
                 'date_and_time' => $request->date_and_time,
-                'duration' => $request->duration,
+                'duration' => $duration,
                 'teacher_id' => $request->teacher_id,
                 'end_training' => $request->end_training
             ]);
         
-            return redirect()->back();
+            return redirect()->back()->with(['sucess' => 'Treino registrado']);;
         }else{
             return redirect()->back()->withErrors(['name' => 'Essa data e horário já está ocupada por uma aula']);
         }
@@ -100,14 +106,17 @@ class TrainingController extends Controller
     {
         //VERIFICA SE EXISTE TREINO NO MESMO HORÁRIO
         $training = Training::compareTrainingSchedules($request->date_and_time, $request->end_training);
-        
+
         if($training->count() == 0){
+            $start = strtotime($request->date_and_time);
+            $end = strtotime($request->end_training);
+            $duration = date( 'H:i:s', abs( $end - $start ) );
+
             $request->validate([
                 'name' => 'required|string|max:255',
                 'maximum_students' => 'required|integer',
                 'teacher_name' => 'required|string|max:255',
                 'date_and_time' => 'required',
-                'duration' => 'required',
                 'teacher_id' => 'required',
                 'end_training' => 'required',
             ]);
@@ -127,7 +136,7 @@ class TrainingController extends Controller
                         'maximum_students' => $training_changed->maximum_students,
                         'teacher_name' => $training_changed->teacher_name,
                         'date_and_time' => $training_changed->date_and_time,
-                        'duration' => $training_changed->duration,
+                        'duration' => $duration,
                         'end_training' => $training_changed->end_training,
                     ];
                     \Mail::to($value->user()->email)->send(new \App\Mail\ChangeTraining($details));
