@@ -1,9 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.user')
 
 @section('content')
     <!-- HERO -->
     <section class="hero d-flex flex-column justify-content-center align-items-center" id="home">
-
             <div class="bg-overlay"></div>
 
             <div class="container">
@@ -156,18 +155,18 @@
                                 <tbody>
                                     @foreach ($teachertraining as $item)
                                         <tr>
-                                            <td><small>{{$item->date_and_time}}</small></td>
+                                            <td><small>{{ date( 'd/m/Y', strtotime($item->date_and_time)) }}</small></td>
                                             <td>
-                                                <span>{{$item->date_and_time}} - {{$item->end_training}}</span>
+                                                <span>{{ date( 'H:i', strtotime($item->date_and_time)) }} - {{ date( 'H:i', strtotime($item->end_training)) }}</span>
                                             </td>
                                             <td>
-                                                <strong>{{$item->name}}</strong>
+                                                <strong>{{ $item->name }}</strong>
                                             </td>
                                             <td>
-                                                <strong>{{$item->maximum_students}}</strong>
+                                                <strong>{{ $item->maximum_students }}</strong>
                                             </td>
                                             <td>
-                                                <strong>{{$item->total_students}}</strong>
+                                                <strong>{{ $item->total_students }}</strong>
                                             </td>
 
                                             <!-- Ações do professor sobre seus treinos -->
@@ -312,6 +311,7 @@
             <section class="schedule section" id="controles">
                 <div class="container">
                     <div class="container">
+                        <!-- AULAS RESERVADAS PELO ALUNO -->
                         <div class="row">
         
                             <div class="col-lg-12 col-12 text-center">
@@ -338,21 +338,21 @@
                                     <tbody>
                                         @foreach ($studentTraining as $item)
                                             <tr>
-                                                <td><small>{{$item->date_and_time}}</small></td>
+                                                <td><small>{{ date( 'd/m/Y', strtotime($item->date_and_time)) }}</small></td>
                                                 <td>
-                                                    <span>{{$item->date_and_time}} - {{$item->end_training}}</span>
+                                                    <span>{{ date( 'H:i', strtotime($item->date_and_time)) }} - {{ date( 'H:i', strtotime($item->end_training)) }}</span>
                                                 </td>
                                                 <td>
-                                                    <strong>{{$item->name}}</strong>
+                                                    <strong>{{ $item->name }}</strong>
                                                 </td>
                                                 <td>
-                                                    <strong>{{$item->teacher_name}}</strong>
+                                                    <strong>{{ $item->teacher_name }}</strong>
                                                 </td>
                                                 <td>
-                                                    <strong>{{$item->maximum_students}}</strong>
+                                                    <strong>{{ $item->maximum_students }}</strong>
                                                 </td>
                                                 <td>
-                                                    <strong>{{count($item->users)}}</strong>
+                                                    <strong>{{ count($item->users) }}</strong>
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('cancelar_treino', ['id' => $item->id]) }}" class="btn btn-sucess">
@@ -365,6 +365,7 @@
                                 </table>
                             </div>
                         </div>
+                        <!-- AULAS DO DIA ATUAL -->
                         <div class="row">
         
                             <div class="col-lg-12 col-12 text-center">
@@ -384,6 +385,7 @@
                                         <th>Professor</th>
                                         <th>Max. Alunos</th>
                                         <th>Fizeram check-in</th>
+                                        <th>Vagas restantes</th>
                                         <th>Disponibilidade</th>
                                     </thead>
         
@@ -391,21 +393,88 @@
                                     <tbody>
                                         @foreach ($trainingToday as $item)
                                             <tr>
-                                                <td><small>{{$item->date_and_time}}</small></td>
+                                                <td><small>{{ date( 'd/m/Y', strtotime($item->date_and_time)) }}</small></td>
                                                 <td>
-                                                    <span>{{$item->date_and_time}} - {{$item->end_training}}</span>
+                                                    <span>{{ date( 'H:i', strtotime($item->date_and_time)) }} - {{ date( 'H:i', strtotime($item->end_training)) }}</span>
                                                 </td>
                                                 <td>
-                                                    <strong>{{$item->name}}</strong>
+                                                    <strong>{{ $item->name }}</strong>
                                                 </td>
                                                 <td>
-                                                    <strong>{{$item->teacher_name}}</strong>
+                                                    <strong>{{ $item->teacher_name }}</strong>
                                                 </td>
                                                 <td>
-                                                    <strong>{{$item->maximum_students}}</strong>
+                                                    <strong>{{ $item->maximum_students }}</strong>
                                                 </td>
                                                 <td>
-                                                    <strong>{{$item->total_students}}</strong>
+                                                    <strong>{{ $item->total_students }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $item->maximum_students - $item->total_students }}</strong>
+                                                </td>
+                                                @if($item->maximum_students > $item->total_students)
+                                                    <td>
+                                                        <a href="{{ route('reservar_treino', ['id' => $item->id]) }}" class="btn btn-sucess">
+                                                            <strong>Reservar</strong>
+                                                        </a>
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        <strong>Sem Vagas</strong>
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- AULAS DA SEMANA ATUAL -->
+                        <div class="row">
+        
+                            <div class="col-lg-12 col-12 text-center">
+                                <h6 data-aos="fade-up">vamos treinar essa semana?</h6>
+                                <h2 class="text-white" data-aos="fade-up" data-aos-delay="200">Aulas nesta semana</h2>
+                            </div>
+        
+                            <div class="col-lg-12 py-5 col-md-12 col-12">
+                                <table class="table table-bordered table-responsive schedule-table" data-aos="fade-up" data-aos-delay="300">
+        
+                                    <thead class="thead-light">
+                                        <th>
+                                            <i class="fa fa-calendar"></i>
+                                        </th>
+                                        <th>Horário</th>
+                                        <th>Aula</th>
+                                        <th>Professor</th>
+                                        <th>Max. Alunos</th>
+                                        <th>Fizeram check-in</th>
+                                        <th>Vagas restantes</th>
+                                        <th>Disponibilidade</th>
+                                    </thead>
+        
+                                    <!-- Lista calendário de treinos da  -->
+                                    <tbody>
+                                        @foreach ($trainingWeek as $item)
+                                            <tr>
+                                                <td><small>{{ date( 'd/m/Y', strtotime($item->date_and_time)) }}</small></td>
+                                                <td>
+                                                    <span>{{ date( 'H:i', strtotime($item->date_and_time)) }} - {{ date( 'H:i', strtotime($item->end_training)) }}</span>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $item->name }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $item->teacher_name }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $item->maximum_students }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $item->total_students }}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ $item->maximum_students - $item->total_students }}</strong>
                                                 </td>
                                                 @if($item->maximum_students > $item->total_students)
                                                     <td>
@@ -429,183 +498,7 @@
             </section>
         @endif
     @else <!-- SEM USÚARIO LOGADO ENTÃO OFERECEMOS A LANDING-PAGE -->
-        <section class="feature" id="feature">
-            <div class="container">
-                <div class="row">
-                    <div class="d-flex flex-column justify-content-center ml-lg-auto mr-lg-5 col-lg-5 col-md-6 col-12">
-                        <h2 class="mb-3 text-white" data-aos="fade-up">Novo na karate system?</h2>
-
-                        <h6 class="mb-4 text-white" data-aos="fade-up">Torne-se membro e ganhe uma semana de aulas experimentais</h6>
-
-                        <p data-aos="fade-up" data-aos-delay="200">Nosso objetivo é disseminar a cultura do karatê pelo mundo.</p>
-
-                        <a href="#" class="btn custom-btn bg-color mt-3" data-aos="fade-up" data-aos-delay="300" data-toggle="modal" data-target="#membershipForm">Torne-se membro agora</a>
-                    </div>
-
-                    <div class="mr-lg-auto mt-3 col-lg-4 col-md-6 col-12">
-                        <div class="about-working-hours">
-                            <div>
-
-                                <h2 class="mb-4 text-white" data-aos="fade-up" data-aos-delay="500">Próximas aulas</h2>
-
-                                <!-- LISTA 3 aulas MAIS PRÓXIMAS -->
-                                <strong class="d-block" data-aos="fade-up" data-aos-delay="600">Sunday : Closed</strong>
-
-                                <strong class="mt-3 d-block" data-aos="fade-up" data-aos-delay="700">Monday - Friday</strong>
-
-                                <p data-aos="fade-up" data-aos-delay="800">7:00 AM - 10:00 PM</p>
-
-                                <strong class="mt-3 d-block" data-aos="fade-up" data-aos-delay="700">Saturday</strong>
-
-                                <p data-aos="fade-up" data-aos-delay="800">6:00 AM - 4:00 PM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- ABOUT -->
-        <section class="about section" id="about">
-            <div class="container">
-                <div class="row">
-                    <div class="mt-lg-5 mb-lg-0 mb-4 col-lg-5 col-md-10 mx-auto col-12">
-                        <h2 class="mb-4" data-aos="fade-up" data-aos-delay="300">Olá, somos a Karatê System</h2>
-
-                        <p data-aos="fade-up" data-aos-delay="400">Uma nova fórmula divertida e inspiradora de manter seu corpo, saúde e defesa pessoal em dia por meio do Karatê.</p>
-                        <p data-aos="fade-up" data-aos-delay="400">Venha fazer parte da academia de karatê que mais cresce no mundo.</p>
-
-                    </div>
-
-                    <!-- LISTA DOIS PROFESSORES ALEATÓRIAMENTE -->
-                    <div class="ml-lg-auto col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="700">
-                        <div class="team-thumb">
-                            <img src="images/team/team-image.jpg" class="img-fluid" alt="Trainer">
-
-                            <div class="team-info d-flex flex-column">
-
-                                <h3>Mary Yan</h3>
-                                <span>Yoga Instructor</span>
-
-                                <ul class="social-icon mt-3">
-                                    <li><a href="#" class="fa fa-twitter"></a></li>
-                                    <li><a href="#" class="fa fa-instagram"></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mr-lg-auto mt-5 mt-lg-0 mt-md-0 col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="800">
-                        <div class="team-thumb">
-                            <img src="images/team/team-image01.jpg" class="img-fluid" alt="Trainer">
-
-                            <div class="team-info d-flex flex-column">
-
-                                <h3>Catherina</h3>
-                                <span>Body trainer</span>
-
-                                <ul class="social-icon mt-3">
-                                    <li><a href="#" class="fa fa-instagram"></a></li>
-                                    <li><a href="#" class="fa fa-facebook"></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- SCHEDULE -->
-        <section class="schedule section" id="schedule">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-12 col-12 text-center">
-                        <h6 data-aos="fade-up">nossos horários semanais</h6>
-
-                        <h2 class="text-white" data-aos="fade-up" data-aos-delay="200">Horário de treino</h2>
-                    </div>
-
-                    <div class="col-lg-12 py-5 col-md-12 col-12">
-                        <table class="table table-bordered table-responsive schedule-table" data-aos="fade-up" data-aos-delay="300">
-
-                            <thead class="thead-light">
-                                <th>
-                                    <i class="fa fa-calendar"></i>
-                                </th>
-                                <th>Horário</th>
-                                <th>Aula</th>
-                                <th>Professor</th>
-                                <th>Max. Alunos</th>
-                                <th>Fizeram check-in</th>
-                                <th>Disponibilidade</th>
-                            </thead>
-
-                            <!-- Lista calendário de treinos -->
-                            <tbody>
-                                <tr>
-                                    <td><small>01/01/22</small></td>
-                                    <td>
-                                        <span>8:00 am - 9:00 am</span>
-                                    </td>
-                                    <td>
-                                        <strong>Karatê Fit</strong>
-                                    </td>
-                                    <td>
-                                        <strong>Jorge</strong>
-                                    </td>
-                                    <td>
-                                        <strong>20</strong>
-                                    </td>
-                                    <td>
-                                        <strong>10</strong>
-                                    </td>
-                                    <td>
-                                        <strong>Reservar</strong>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- CONTACT -->
-        <section class="contact section" id="contact">
-            <div class="container">
-                <div class="row">
-
-                    <div class="ml-auto col-lg-5 col-md-6 col-12">
-                        <h2 class="mb-4 pb-2" data-aos="fade-up" data-aos-delay="200">Entre em contato</h2>
-
-                        <form action="#" method="post" class="contact-form webform" data-aos="fade-up" data-aos-delay="400" role="form">
-                            <input type="text" class="form-control" name="cf-name" placeholder="Nome">
-
-                            <input type="email" class="form-control" name="cf-email" placeholder="Email">
-
-                            <textarea class="form-control" rows="5" name="cf-message" placeholder="Mensagem"></textarea>
-
-                            <button type="submit" class="form-control" id="submit-button" name="submit">Enviar</button>
-                        </form>
-                    </div>
-
-                    <div class="mx-auto mt-4 mt-lg-0 mt-md-0 col-lg-5 col-md-6 col-12">
-                        <h2 class="mb-4" data-aos="fade-up" data-aos-delay="600">Onde estamos</h2>
-
-                        <p data-aos="fade-up" data-aos-delay="800"><i class="fa fa-map-marker mr-1"></i> 37470-000 São Lourenço - Estado de Minas Gerais, Brasil</p>
-
-                        <div class="google-map" data-aos="fade-up" data-aos-delay="900">
-                        <iframe src="https://maps.google.com/maps?q=Av.+Lúcio+Costa,+Rio+de+Janeiro+-+RJ,+Brazil&t=&z=13&ie=UTF8&iwloc=&output=embed" width="1920" height="250" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-                        </div>
-                    </div>
-                        
-                </div>
-            </div>
-        </section>
+        
     @endauth
 
     <!-- FOOTER -->

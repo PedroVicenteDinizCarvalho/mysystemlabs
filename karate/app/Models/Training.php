@@ -85,16 +85,19 @@ class Training extends Model
                 'duration',
                 'teacher_id',
                 'end_training')
-                ->where('date_and_time', '>=', date('Y-m-d'))
+                ->whereYear('date_and_time', '=', date('Y'))
+                ->whereMonth('date_and_time', '=', date('m'))
+                ->whereDay('date_and_time', '=', date('d'))
                 ->orderBy('date_and_time')
                 ->limit(6)
                 ->get();
         return $listTrainings;
     }
 
-    public static function compareTrainingSchedules($date_and_time, $end_training){
+    public static function listWeekTraining(){
         $listTrainings = DB::table('trainings')
                 ->select( 
+                'id',
                 'name',
                 'maximum_students',
                 'total_students',
@@ -103,6 +106,26 @@ class Training extends Model
                 'duration',
                 'teacher_id',
                 'end_training')
+                ->whereYear('date_and_time', '=', date('Y'))
+                ->whereMonth('date_and_time', '=', date('m'))
+                ->orderBy('date_and_time')
+                ->limit(7)
+                ->get();
+        return $listTrainings;
+    }
+
+    public static function compareTrainingSchedules($date_and_time, $end_training){
+        $listTrainings = DB::table('trainings')
+                ->select( 
+                    'id',
+                    'name',
+                    'maximum_students',
+                    'total_students',
+                    'teacher_name',
+                    'date_and_time',
+                    'duration',
+                    'teacher_id',
+                    'end_training')
                 ->whereBetween('date_and_time', [$date_and_time, $end_training])
                 ->orWhereBetween('end_training', [$date_and_time, $end_training])
                 ->get();

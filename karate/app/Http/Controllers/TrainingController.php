@@ -187,9 +187,9 @@ class TrainingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //VERIFICA SE EXISTE TREINO NO MESMO HORÁRIO
+        //VERIFICA SE EXISTE TREINO NO MESMO HORÁRIO QUE SEJA DIFERENTE DO QUE QUEREMOS EDITAR
         $training = Training::compareTrainingSchedules($request->date_and_time, $request->end_training);
-
+        
         //Não encontrou treino no mesmo horário
         if($training->count() == 0){
             $start = strtotime($request->date_and_time);
@@ -235,9 +235,62 @@ class TrainingController extends Controller
             return redirect()->back();
         }
         else{
-            //ENVIA ALERTA DE FALHA
-            Alert::warning('Horário ocupado', 'Verificamos que já existe uma aula nesse horário. Tente cadastrar sua aula com horário ou data diferente.');
-            return redirect()->back()->withErrors(['name' => 'Essa data e horário já está ocupada por uma aula']);
+            //Caso os ids forem iguais podemos editar o treino normalmente 
+            if($training[0]->id == $id){ 
+                $start = strtotime($request->date_and_time);
+                $end = strtotime($request->end_training);
+                $duration = date( 'H:i:s', abs( $end - $start ) );
+
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'maximum_students' => 'required|integer',
+                    'teacher_name' => 'required|string|max:255',
+                    'date_and_time' => 'required',
+                    'teacher_id' => 'required',
+                    'end_training' => 'required',
+                ]);
+        
+                $data = $request->all();
+                $training_changed = Training::find($id)->update($data); //Atualiza
+                
+                //ATUALIZOU DADOS COM SUCESSO
+                if($training_changed){
+                    //VERIFICA SE EXISTEM ALUNOS MATRICULADOS PARA ENVIAR DISPARO DE EMAIL
+                    $students = Training::with('users')->where('id', $id)->get();
+                    if($students->count() != 0){
+                        foreach ($students as $item) {
+                            foreach ($item->users as $value) {
+                                //Dispara email para os alunos avisando que a aula sofreu alterações
+                                $details = [
+                                    'email_student' => $value->email,
+                                    'name_student' => $value->name,
+                                    'name_training' => $data['name'],
+                                    'maximum_students' => $data['maximum_students'],
+                                    'teacher_name' => $data['teacher_name'],
+                                    'date_and_time' => $data['date_and_time'],
+                                    'duration' => $duration,
+                                    'end_training' => $data['end_training'],
+                                ];
+                                \Mail::to($value->email)->send(new \App\Mail\ChangeTraining($details));
+                            }
+                        }
+                    }
+
+                    //ENVIA ALERTA DE SUCESSO
+                    Alert::success('Treino atualizado', 'Seu treino foi atualizado e já avisamos os alunos por email');
+                    return redirect()->back();
+                }
+                else{
+                    //ENVIA ALERTA DE FALHA
+                    Alert::warning('Ops, ocorreu algum problema', 'Ainda não entendemos o que aconteceu, se persistir entre em contato com nosso suporte.');
+                    return redirect()->back()->withErrors(['name' => 'Ainda não entendemos o que aconteceu, se persistir entre em contato com nosso suporte.']);
+                }  
+            }
+            else{
+                //ENVIA ALERTA DE FALHA
+                Alert::warning('Horário ocupado', 'Verificamos que já existe uma aula nesse horário. Tente cadastrar sua aula com horário ou data diferente.');
+                return redirect()->back()->withErrors(['name' => 'Essa data e horário já está ocupada por uma aula']);
+            }
         }
     }
 

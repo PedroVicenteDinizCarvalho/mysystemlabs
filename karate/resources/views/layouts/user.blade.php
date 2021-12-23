@@ -22,7 +22,7 @@
             <nav class="navbar navbar-expand-lg fixed-top">
                 <div class="container">
 
-                    <a class="navbar-brand" href="/">Karatê System</a>
+                    <a class="navbar-brand" href="/home">Karatê System</a>
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -32,19 +32,7 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ml-lg-auto">
                             <li class="nav-item">
-                                <a href="#home" class="nav-link smoothScroll">Home</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#about" class="nav-link smoothScroll">Sobre Nós</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#schedule" class="nav-link smoothScroll">Horários</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="#contact" class="nav-link smoothScroll">Contato</a>
+                                <a href="#home" class="nav-link smoothScroll">Perfil</a>
                             </li>
                         </ul>
 

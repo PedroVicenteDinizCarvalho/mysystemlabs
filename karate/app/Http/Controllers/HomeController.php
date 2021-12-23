@@ -33,9 +33,12 @@ class HomeController extends Controller
         }else{
             $student = auth()->user();
             $studentTraining = $student->trainings;
+            
             $trainingToday = Training::listPresentTraining();
+            $trainingWeek = Training::listWeekTraining();
 
-            return view('home', compact('studentTraining', 'trainingToday'));
+
+            return view('home', compact('studentTraining', 'trainingToday', 'trainingWeek'));
         }
     }
 }
