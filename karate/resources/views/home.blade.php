@@ -429,12 +429,12 @@
                                 </table>
                             </div>
                         </div>
-                        <!-- AULAS DA SEMANA ATUAL -->
+                        <!-- AULAS Do MÊS ATUAL -->
                         <div class="row">
         
                             <div class="col-lg-12 col-12 text-center">
-                                <h6 data-aos="fade-up">vamos treinar essa semana?</h6>
-                                <h2 class="text-white" data-aos="fade-up" data-aos-delay="200">Aulas nesta semana</h2>
+                                <h6 data-aos="fade-up">vamos treinar este mês?</h6>
+                                <h2 class="text-white" data-aos="fade-up" data-aos-delay="200">Próximas aulas neste mês</h2>
                             </div>
         
                             <div class="col-lg-12 py-5 col-md-12 col-12">

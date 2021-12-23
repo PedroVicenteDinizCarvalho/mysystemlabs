@@ -89,12 +89,11 @@ class Training extends Model
                 ->whereMonth('date_and_time', '=', date('m'))
                 ->whereDay('date_and_time', '=', date('d'))
                 ->orderBy('date_and_time')
-                ->limit(6)
                 ->get();
         return $listTrainings;
     }
 
-    public static function listWeekTraining(){
+    public static function listMonthTraining(){
         $listTrainings = DB::table('trainings')
                 ->select( 
                 'id',
@@ -108,8 +107,8 @@ class Training extends Model
                 'end_training')
                 ->whereYear('date_and_time', '=', date('Y'))
                 ->whereMonth('date_and_time', '=', date('m'))
+                ->whereDay('date_and_time', '>=', date('d'))
                 ->orderBy('date_and_time')
-                ->limit(7)
                 ->get();
         return $listTrainings;
     }

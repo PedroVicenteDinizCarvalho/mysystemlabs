@@ -35,7 +35,7 @@ class HomeController extends Controller
             $studentTraining = $student->trainings;
             
             $trainingToday = Training::listPresentTraining();
-            $trainingWeek = Training::listWeekTraining();
+            $trainingWeek = Training::listMonthTraining();
 
 
             return view('home', compact('studentTraining', 'trainingToday', 'trainingWeek'));
