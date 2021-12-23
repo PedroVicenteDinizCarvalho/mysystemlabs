@@ -31,12 +31,11 @@ class HomeController extends Controller
             $teachertraining = Training::teacherTraining($teacher_id);
             return view('home', compact('teachertraining'));
         }else{
-            $student_id = Auth::user()->id;
-            $studentTraining = TrainingUser::listUserTrainings($student_id);
-
+            $student = auth()->user();
+            $studentTraining = $student->trainings;
             $trainingToday = Training::listPresentTraining();
 
-            return view('home', compact('studentTraining', 'trainingToday', 'studentTraining'));
+            return view('home', compact('studentTraining', 'trainingToday'));
         }
     }
 }

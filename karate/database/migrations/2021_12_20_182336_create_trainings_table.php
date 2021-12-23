@@ -17,6 +17,7 @@ class CreateTrainingsTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('maximum_students');
+            $table->integer('total_students')->default(0);
             $table->string('teacher_name');
             $table->datetime('date_and_time')->unique();
             $table->datetime('end_training');

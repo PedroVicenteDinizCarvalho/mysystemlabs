@@ -61,5 +61,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function(){
                 ->name('editar_treino');
     Route::get('/treinos/excluir/{id}', [TrainingController::class, 'destroy'])
                 ->name('excluir_treino');
+
+    //Aluno faz check-in no treino
+    Route::get('/treinos/reservar/{id}', [TrainingController::class, 'edit'])
+                ->name('reservar_treino');
+    //Aluno cancela check-in no treino
+    Route::get('/treinos/reservar/cancelar/{id}', [TrainingController::class, 'cancel_checkin'])
+                ->name('cancelar_treino');
    
 });

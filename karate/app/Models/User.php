@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function trainings()
     {
-        return $this->belongsToMany(Training::class, 'training_users', 'user_id', 'training_id');
+        return $this->belongsToMany(Training::class);
     }
 
     public static function listUserStudents(){

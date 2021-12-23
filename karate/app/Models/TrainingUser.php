@@ -12,8 +12,18 @@ class TrainingUser extends Model
 
     protected $fillable = ['user_id', 'training_id'];
 
+    public static function listAllTrainingUsers($training_id){
+        $listUsersAdmin = DB::table('training_user')
+                ->select( 
+                'user_id',
+                'training_id')
+                ->where('training_id', '=', $training_id)
+                ->get();
+        return $listUsersAdmin;
+    }
+
     public static function listTrainingUsers($training_id){
-        $listUsersAdmin = DB::table('training_users')
+        $listUsersAdmin = DB::table('training_user')
                 ->select( 
                 'user_id',
                 'training_id')
@@ -23,7 +33,7 @@ class TrainingUser extends Model
     }
 
     public static function listUserTrainings($user_id){
-        $listUsersAdmin = DB::table('training_users')
+        $listUsersAdmin = DB::table('training_user')
                 ->select( 
                 'user_id',
                 'training_id')
@@ -32,4 +42,14 @@ class TrainingUser extends Model
         return $listUsersAdmin;
     }
 
+    public static function cancelCheckin($id, $user_id){
+        $listUsersAdmin = DB::table('training_user')
+                ->select( 
+                'user_id',
+                'training_id')
+                ->where('user_id', '=', $user_id)
+                ->where('training_id', '=', $id)
+                ->delete();
+        return $listUsersAdmin;
+    }
 }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Training;
 use App\Models\TrainingUser;
+use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TrainingController extends Controller
 {
@@ -91,8 +93,15 @@ class TrainingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
+    {   
+        $student = auth()->user();
+        $student->trainings()->attach($id);
+
+        $training_changed = Training::find($id);
+        $training_changed->total_students = $training_changed->total_students + 1;
+        $training_changed->update();
+        
+        return redirect()->back();
     }
 
     /**
@@ -158,6 +167,18 @@ class TrainingController extends Controller
     public function destroy($id)
     {
         Training::find($id)->delete();
+        return redirect()->back();
+    }
+
+    //Realiza cancelamento do Check-in do usuário no treino
+    public function cancel_checkin($id)
+    {
+        TrainingUser::cancelCheckin($id, Auth::user()->id);
+
+        $training_changed = Training::find($id);
+        $training_changed->total_students = $training_changed->total_students - 1;
+        $training_changed->update();
+
         return redirect()->back();
     }
 }

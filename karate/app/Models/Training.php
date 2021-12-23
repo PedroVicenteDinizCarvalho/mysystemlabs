@@ -14,6 +14,7 @@ class Training extends Model
     [
         'name',
         'maximum_students',
+        'total_students',
         'teacher_name',
         'date_and_time',
         'duration',
@@ -21,11 +22,16 @@ class Training extends Model
         'end_training'
     ];
 
+    public function users() {
+        return $this->belongsToMany(User::class);
+    }
+
     public static function listTrainings(){
         $listTrainings = DB::table('trainings')
                 ->select( 
                 'name',
                 'maximum_students',
+                'total_students',
                 'teacher_name',
                 'date_and_time',
                 'duration',
@@ -40,6 +46,7 @@ class Training extends Model
                 ->select( 
                 'name',
                 'maximum_students',
+                'total_students',
                 'teacher_name',
                 'date_and_time',
                 'duration',
@@ -55,6 +62,7 @@ class Training extends Model
                 ->select( 
                 'name',
                 'maximum_students',
+                'total_students',
                 'teacher_name',
                 'date_and_time',
                 'duration',
@@ -68,15 +76,17 @@ class Training extends Model
     public static function listPresentTraining(){
         $listTrainings = DB::table('trainings')
                 ->select( 
+                'id',
                 'name',
                 'maximum_students',
+                'total_students',
                 'teacher_name',
                 'date_and_time',
                 'duration',
                 'teacher_id',
                 'end_training')
                 ->where('date_and_time', '>=', date('Y-m-d'))
-                ->orderBy('end_training')
+                ->orderBy('date_and_time')
                 ->limit(6)
                 ->get();
         return $listTrainings;
@@ -87,6 +97,7 @@ class Training extends Model
                 ->select( 
                 'name',
                 'maximum_students',
+                'total_students',
                 'teacher_name',
                 'date_and_time',
                 'duration',
@@ -104,6 +115,7 @@ class Training extends Model
             'id',
             'name',
             'maximum_students',
+            'total_students',
             'teacher_name',
             'date_and_time',
             'duration',

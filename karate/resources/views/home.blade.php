@@ -168,7 +168,7 @@
                                                 <strong>{{$item->maximum_students}}</strong>
                                             </td>
                                             <td>
-                                                <strong>10</strong>
+                                                <strong>{{$item->total_students}}</strong>
                                             </td>
 
                                             <td>
@@ -315,6 +315,59 @@
                         <div class="row">
         
                             <div class="col-lg-12 col-12 text-center">
+                                <h6 data-aos="fade-up">treinos reservados</h6>
+                                <h2 class="text-white" data-aos="fade-up" data-aos-delay="200">Sua agenda</h2>
+                            </div>
+        
+                            <div class="col-lg-12 py-5 col-md-12 col-12">
+                                <table class="table table-bordered table-responsive schedule-table" data-aos="fade-up" data-aos-delay="300">
+        
+                                    <thead class="thead-light">
+                                        <th>
+                                            <i class="fa fa-calendar"></i>
+                                        </th>
+                                        <th>Horário</th>
+                                        <th>Aula</th>
+                                        <th>Professor</th>
+                                        <th>Max. Alunos</th>
+                                        <th>Fizeram Check-in</th>
+                                        <th>Desistir da Aula</th>
+                                    </thead>
+        
+                                    <!-- Lista calendário de treinos com check-in do usuário -->
+                                    <tbody>
+                                        @foreach ($studentTraining as $item)
+                                            <tr>
+                                                <td><small>{{$item->date_and_time}}</small></td>
+                                                <td>
+                                                    <span>{{$item->date_and_time}} - {{$item->end_training}}</span>
+                                                </td>
+                                                <td>
+                                                    <strong>{{$item->name}}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{$item->teacher_name}}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{$item->maximum_students}}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{count($item->users)}}</strong>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('cancelar_treino', ['id' => $item->id]) }}" class="btn btn-sucess">
+                                                        <strong>Cancelar</strong>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+        
+                            <div class="col-lg-12 col-12 text-center">
                                 <h6 data-aos="fade-up">vamos treinar hoje?</h6>
                                 <h2 class="text-white" data-aos="fade-up" data-aos-delay="200">Próximos horários</h2>
                             </div>
@@ -352,11 +405,19 @@
                                                     <strong>{{$item->maximum_students}}</strong>
                                                 </td>
                                                 <td>
-                                                    <strong>10</strong>
+                                                    <strong>{{$item->total_students}}</strong>
                                                 </td>
+                                                @if($item->maximum_students > $item->total_students)
                                                     <td>
-                                                        <strong>Reservar</strong>
+                                                        <a href="{{ route('reservar_treino', ['id' => $item->id]) }}" class="btn btn-sucess">
+                                                            <strong>Reservar</strong>
+                                                        </a>
                                                     </td>
+                                                @else
+                                                    <td>
+                                                        <strong>Sem Vagas</strong>
+                                                    </td>
+                                                @endif
                                             </tr>
                                         @endforeach
                                     </tbody>
