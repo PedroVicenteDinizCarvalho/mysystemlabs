@@ -19,7 +19,7 @@ class CreateTrainingsTable extends Migration
             $table->integer('maximum_students');
             $table->integer('total_students')->default(0);
             $table->string('teacher_name');
-            $table->datetime('date_and_time')->unique();
+            $table->datetime('date_and_time');
             $table->datetime('end_training');
             $table->time('duration');
             $table->unsignedBigInteger('teacher_id');
