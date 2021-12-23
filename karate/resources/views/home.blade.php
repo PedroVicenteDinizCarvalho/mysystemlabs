@@ -131,11 +131,10 @@
                                         </div>
 
                                         <div class="modal-footer"></div>
-
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div> <!-- / Modal cadastro de treino -->
+                        </div> 
     
                         <div class="col-lg-12 py-5 col-md-12 col-12">
                             <table class="table table-bordered table-responsive schedule-table" data-aos="fade-up" data-aos-delay="300">
@@ -171,8 +170,9 @@
                                                 <strong>{{$item->total_students}}</strong>
                                             </td>
 
+                                            <!-- Ações do professor sobre seus treinos -->
                                             <td>
-                                                <a href="">
+                                                <a href="{{route('treino_usuarios', ['id' => $item->id])}}">
                                                     <strong><i class="fa fa-users"></i></strong>
                                                 </a> 
                                             </td>

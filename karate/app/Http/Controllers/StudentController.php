@@ -18,7 +18,7 @@ class StudentController extends Controller
     {
         $listUsers = User::listUserStudents();
        
-        return view('students', compact('listUsers'));
+        return view('home', compact('listUsers'));
     }
 
     /**

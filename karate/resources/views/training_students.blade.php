@@ -3,215 +3,64 @@
 @section('content')
     <!-- HERO -->
     <section class="hero d-flex flex-column justify-content-center align-items-center" id="home">
+        @auth
+            @if(Auth::user()->user_type == 'teacher')<!-- Se tipo de usuário for igual a professor exbimos as opções administrativas para o mesmo -->
+                <div class="bg-overlay"></div>
 
-            <div class="bg-overlay"></div>
+                <div class="container">
+                    <div class="row">
+        
+                        <div class="col-lg-12 col-12 text-center">
+                            <h6 data-aos="fade-up">alguns dos seus alunos</h6>
 
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-8 col-md-10 mx-auto col-12">
-                        <div class="hero-text mt-5 text-center">
-
-                            <h6 data-aos="fade-up" data-aos-delay="300">nova forma de construir um estilo de vida saudável</h6>
-
-                            <h1 class="text-white" data-aos="fade-up" data-aos-delay="500">Nossa luta é manter seu corpo em dia</h1>
+                            <h2 class="text-white" data-aos="fade-up" data-aos-delay="200">Alunos confirmados no treino</h2>
                             
-                            @auth
-                                <a href="#controles" class="btn custom-btn mt-3" data-aos="fade-up" data-aos-delay="600">Meus treinos</a>
-                            @else 
-                                <a href="#feature" class="btn custom-btn mt-3" data-aos="fade-up" data-aos-delay="600">Comece agora</a>
-
-                                <a href="#" data-toggle="modal" data-target="#modalLogin" class="btn custom-btn bordered mt-3" data-aos="fade-up" data-aos-delay="700">Sou membro</a>
-                            @endauth
+                            <a class="btn btn-primary" data-aos="fade-up" data-aos-delay="200" href="/home">
+                                Voltar
+                            </a>
                         </div>
-                    </div>
+                
+                        <div class="col-lg-12 py-5 col-md-12 col-12">
+                            <table class="table table-bordered table-responsive schedule-table" data-aos="fade-up" data-aos-delay="300">
 
-                </div>
-            </div>
-    </section>
+                                <thead class="thead-light">
+                                    <th>Nome</th>
+                                    <th>Contato</th>
+                                    <th>Idade</th>
+                                    <th>Genêro</th>
+                                    <th>Graduação</th>
+                                </thead>
 
-    <section class="feature" id="feature">
-        <div class="container">
-            <div class="row">
-                <div class="d-flex flex-column justify-content-center ml-lg-auto mr-lg-5 col-lg-5 col-md-6 col-12">
-                    <h2 class="mb-3 text-white" data-aos="fade-up">Novo na karate system?</h2>
-
-                    <h6 class="mb-4 text-white" data-aos="fade-up">Torne-se membro e ganhe uma semana de aulas experimentais</h6>
-
-                    <p data-aos="fade-up" data-aos-delay="200">Nosso objetivo é disseminar a cultura do karatê pelo mundo.</p>
-
-                    <a href="#" class="btn custom-btn bg-color mt-3" data-aos="fade-up" data-aos-delay="300" data-toggle="modal" data-target="#membershipForm">Torne-se membro agora</a>
-                </div>
-
-                <div class="mr-lg-auto mt-3 col-lg-4 col-md-6 col-12">
-                    <div class="about-working-hours">
-                        <div>
-
-                            <h2 class="mb-4 text-white" data-aos="fade-up" data-aos-delay="500">Funcionamento</h2>
-
-                            <!-- LISTA 3 aulas MAIS PRÓXIMAS -->
-                            <strong class="d-block" data-aos="fade-up" data-aos-delay="600">Todos os dias</strong>
-
-                            <p data-aos="fade-up" data-aos-delay="800">05:00 AM - 23:00 PM</p>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- ABOUT -->
-    <section class="about section" id="about">
-        <div class="container">
-            <div class="row">
-                <div class="mt-lg-5 mb-lg-0 mb-4 col-lg-5 col-md-10 mx-auto col-12">
-                    <h2 class="mb-4" data-aos="fade-up" data-aos-delay="300">Olá, somos a Karatê System</h2>
-
-                    <p data-aos="fade-up" data-aos-delay="400">Uma nova fórmula divertida e inspiradora de manter seu corpo, saúde e defesa pessoal em dia por meio do Karatê.</p>
-                    
-                    <p data-aos="fade-up" data-aos-delay="400">Venha fazer parte da academia de karatê que mais cresce no mundo.</p>
-                </div>
-
-                <!-- LISTA DOIS PROFESSORES ALEATÓRIAMENTE -->
-                <div class="ml-lg-auto col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="700">
-                    <div class="team-thumb">
-                        <img src="assets/images/team/team-image.jpg" class="img-fluid" alt="Trainer">
-
-                        <div class="team-info d-flex flex-column">
-
-                            <h3>Jackie Chan</h3>
-                            <span>Fundador</span>
-
-                            <ul class="social-icon mt-3">
-                                <li><a href="https://pt-br.facebook.com/jackie" class="fa fa-facebook" target="_blank"></a></li>
-                                <li><a href="https://www.instagram.com/jackiechan/?hl=pt" class="fa fa-instagram" target="_blank"></a></li>
-                            </ul>
+                                <!-- Lista calendário de treinos -->
+                                <tbody>
+                                    @foreach ($students as $item)
+                                        @foreach($item['users'] as $student)
+                                            <tr>      
+                                                <td><small>{{$student->name}}</small></td>
+                                                <td>
+                                                    <span>{{$student->email}}</span>
+                                                </td>
+                                                <td>
+                                                    <strong>{{$student->age}}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{$student->gender}}</strong>
+                                                </td>
+                                                <td>
+                                                    <strong>{{$student->graduate}}</strong>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-                <div class="mr-lg-auto mt-5 mt-lg-0 mt-md-0 col-lg-3 col-md-6 col-12" data-aos="fade-up" data-aos-delay="800">
-                    <div class="team-thumb">
-                        <img src="assets/images/team/team-image1.jpg" class="img-fluid" alt="Trainer">
-
-                        <div class="team-info d-flex flex-column">
-
-                            <h3>Lyoto Machida</h3>
-                            <span>Professor</span>
-
-                            <ul class="social-icon mt-3">
-                                <li><a href="https://www.instagram.com/lyotomachidafw/?hl=pt" class="fa fa-instagram" target="_blank"></a></li>
-                                <li><a href="https://pt-br.facebook.com/lyotomachidaoficial" class="fa fa-facebook" target="_blank"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            @endif
+        @endauth
     </section>
-
-
-    <!-- SCHEDULE -->
-    <section class="schedule section" id="schedule">
-        <div class="container">
-            <div class="row">
-
-                <div class="col-lg-12 col-12 text-center">
-                    <h6 data-aos="fade-up">nossos horários semanais</h6>
-
-                    <h2 class="text-white" data-aos="fade-up" data-aos-delay="200">Próximos horário de treino</h2>
-                </div>
-
-                <div class="col-lg-12 py-5 col-md-12 col-12">
-                    <table class="table table-bordered table-responsive schedule-table" data-aos="fade-up" data-aos-delay="300">
-
-                        <thead class="thead-light">
-                            <th>
-                                <i class="fa fa-calendar"></i>
-                            </th>
-                            <th>Horário</th>
-                            <th>Aula</th>
-                            <th>Professor</th>
-                            <th>Max. Alunos</th>
-                            <th>Fizeram check-in</th>
-                            <th>Disponibilidade</th>
-                        </thead>
-
-                        <!-- Lista calendário de treinos -->
-                        <tbody>
-                            @foreach ($trainingToday as $item)
-                                <tr>
-                                    <td><small>{{$item->date_and_time}}</small></td>
-                                    <td>
-                                        <span>{{$item->date_and_time}} - {{$item->end_training}}</span>
-                                    </td>
-                                    <td>
-                                        <strong>{{$item->name}}</strong>
-                                    </td>
-                                    <td>
-                                        <strong>{{$item->teacher_name}}</strong>
-                                    </td>
-                                    <td>
-                                        <strong>{{$item->maximum_students}}</strong>
-                                    </td>
-                                    <td>
-                                        <strong>{{$item->total_students}}</strong>
-                                    </td>
-                                    @if($item->maximum_students > $item->total_students)
-                                        <td>
-                                            <a href="#" data-toggle="modal" data-target="#membershipForm" class="btn btn-sucess">
-                                                <strong>Reservar</strong>
-                                            </a>
-                                        </td>
-                                    @else
-                                        <td>
-                                            <strong>Sem Vagas</strong>
-                                        </td>
-                                    @endif
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- CONTACT -->
-    <section class="contact section" id="contact">
-        <div class="container">
-            <div class="row">
-
-                <div class="ml-auto col-lg-5 col-md-6 col-12">
-                    <h2 class="mb-4 pb-2" data-aos="fade-up" data-aos-delay="200">Entre em contato</h2>
-
-                    <form action="#" method="post" class="contact-form webform" data-aos="fade-up" data-aos-delay="400" role="form">
-                        <input type="text" class="form-control" name="cf-name" placeholder="Nome">
-
-                        <input type="email" class="form-control" name="cf-email" placeholder="Email">
-
-                        <textarea class="form-control" rows="5" name="cf-message" placeholder="Mensagem"></textarea>
-
-                        <button type="submit" class="form-control" id="submit-button" name="submit">Enviar</button>
-                    </form>
-                </div>
-
-                <div class="mx-auto mt-4 mt-lg-0 mt-md-0 col-lg-5 col-md-6 col-12">
-                    <h2 class="mb-4" data-aos="fade-up" data-aos-delay="600">Onde estamos</h2>
-
-                    <p data-aos="fade-up" data-aos-delay="800"><i class="fa fa-map-marker mr-1"></i> 37470-000 São Lourenço - Estado de Minas Gerais, Brasil</p>
-
-                    <div class="google-map" data-aos="fade-up" data-aos-delay="900">
-                    </div>
-                </div>
-                    
-            </div>
-        </div>
-    </section>
-
+        
     <!-- FOOTER -->
     <footer class="site-footer">
         <div class="container">

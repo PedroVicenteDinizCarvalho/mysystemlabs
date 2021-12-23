@@ -3,6 +3,7 @@
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TrainingController;
+use App\Models\Training;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $trainingToday = Training::listPresentTraining();
+
+    return view('welcome', compact('trainingToday'));
 });
 
 Auth::routes();
@@ -40,6 +43,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function(){
                 ->name('editar_professor');
     Route::get('/professores/excluir/{id}', [TeacherController::class, 'destroy'])
                 ->name('excluir_professor');
+
+    //Exibe todos os alunos com check-in no treino 
+    Route::get('/professor/treino/alunos/{id}', [TrainingController::class, 'show'])
+                ->name('treino_usuarios');
 
     //Alunos CRUD
     Route::get('/alunos', [StudentController::class, 'index'])

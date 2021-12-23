@@ -17,7 +17,7 @@ class TeacherController extends Controller
     {
         $listUsers = User::listUserTeachers();
        
-        return view('teachers', compact('listUsers'));
+        return view('home', compact('listUsers'));
     }
 
     /**

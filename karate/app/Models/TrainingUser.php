@@ -42,6 +42,17 @@ class TrainingUser extends Model
         return $listUsersAdmin;
     }
 
+    public static function listUserTraining($user_id, $training_id){
+        $listUsersAdmin = DB::table('training_user')
+                ->select( 
+                'user_id',
+                'training_id')
+                ->where('user_id', '=', $user_id)
+                ->where('training_id', '=', $training_id)
+                ->get();
+        return $listUsersAdmin;
+    }
+
     public static function cancelCheckin($id, $user_id){
         $listUsersAdmin = DB::table('training_user')
                 ->select( 

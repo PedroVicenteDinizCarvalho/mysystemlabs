@@ -126,4 +126,21 @@ class Training extends Model
         ->get();
         return $listTrainings;
     }
+
+    public static function listUsersTraining($id){
+        $listTrainings = DB::table('trainings')
+        ->select( 
+            'id',
+            'name',
+            'maximum_students',
+            'total_students',
+            'teacher_name',
+            'date_and_time',
+            'duration',
+            'teacher_id',
+            'end_training')
+        ->where('id', '=', $id)
+        ->get();
+        return $listTrainings;
+    }
 }
