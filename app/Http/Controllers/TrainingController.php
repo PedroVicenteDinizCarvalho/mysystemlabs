@@ -109,19 +109,19 @@ class TrainingController extends Controller
         //Verifica se existe usuário logado
         if($student){
             $studentTrainings = TrainingUser::listUserTraining($student->id, $id);
-
             //Caso usuário não tenha nenhum check-in feito ele pode finalizar sua ação
             if($studentTrainings->count() == 0){ 
+
                 $training_changed = Training::find($id);
 
                 //VERIFICA SE FALTAM MAIS DE 30 MINUTOS PARA COMEÇAR O TREINO
                 $start = strtotime($training_changed->date_and_time);
                 $end = strtotime(date('Y-m-d H:i:s'));
-                $timer = date( 'H:i:s', abs( $end - $start ) );
-              
-                if(strtotime($timer) > strtotime("30 minutes")){
-                    $student->trainings()->attach($id);
+                $timer = round(abs($start - $end) / 60,2);
 
+                if( $timer > 30 ){
+
+                    $student->trainings()->attach($id);
                     $training_changed->total_students = $training_changed->total_students + 1;
                     $training_changed->update();
 
@@ -130,7 +130,7 @@ class TrainingController extends Controller
                     return redirect()->back();
                 }
                 else{ // FALTAM 30 MIN OU MENOS ENTÃO ALUNO NÃO PODE FAZER CHECK-IN
-
+                   
                     //ENVIA ALERTA DE FALHA
                     Alert::warning('Tente mais cedo na próxima', 'Este treino já está quase começando e não aceita mais reservas');
                     return redirect()->back();
@@ -138,7 +138,6 @@ class TrainingController extends Controller
             }
             else{ //Se constar algum check-in em alguma aula verificamos se já fez check in neste treino
                 foreach($studentTrainings as $studentTraining){
-
                     //Se realizou check-in retornamos ele de volta para view
                     if($studentTraining->training_id == $id){
 
@@ -147,15 +146,17 @@ class TrainingController extends Controller
                         return redirect()->back();
                     }
                     else{ //Se ele não estiver com check-in neste treino deixamos ele finalizar a ação
+                       
                         $training_changed = Training::find($id);
 
                         //VERIFICA SE FALTAM MAIS DE 30 MINUTOS PARA COMEÇAR O TREINO
                         $start = strtotime($training_changed->date_and_time);
                         $end = strtotime(date('Y-m-d H:i:s'));
-                        $timer = date( 'H:i:s', abs( $end - $start ) );
-                        if(strtotime($timer) > strtotime("30 minutes")){ 
-                            $student->trainings()->attach($id);
+                        $timer = round(abs($start - $end) / 60,2);
+                        
+                        if($timer > 30){
 
+                            $student->trainings()->attach($id);
                             $training_changed->total_students = $training_changed->total_students + 1;
                             $training_changed->update();
 
@@ -164,7 +165,7 @@ class TrainingController extends Controller
                             return redirect()->back();
                         }
                         else{ // FALTAM 30 MIN OU MENOS ENTÃO ALUNO NÃO PODE FAZER CHECK-IN
-
+                            
                             //ENVIA ALERTA DE FALHA
                             Alert::warning('Tente mais cedo na próxima', 'Este treino já está quase começando e não aceita mais reservas');
                             return redirect()->back();
