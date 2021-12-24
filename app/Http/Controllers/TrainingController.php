@@ -119,7 +119,7 @@ class TrainingController extends Controller
                 $end = strtotime(date('Y-m-d H:i:s'));
                 $timer = date( 'H:i:s', abs( $end - $start ) );
               
-                if($timer > strtotime("30 minutes")){
+                if(strtotime($timer) > strtotime("30 minutes")){
                     $student->trainings()->attach($id);
 
                     $training_changed->total_students = $training_changed->total_students + 1;
@@ -153,7 +153,7 @@ class TrainingController extends Controller
                         $start = strtotime($training_changed->date_and_time);
                         $end = strtotime(date('Y-m-d H:i:s'));
                         $timer = date( 'H:i:s', abs( $end - $start ) );
-                        if($timer > strtotime("30 minutes")){ 
+                        if(strtotime($timer) > strtotime("30 minutes")){ 
                             $student->trainings()->attach($id);
 
                             $training_changed->total_students = $training_changed->total_students + 1;
