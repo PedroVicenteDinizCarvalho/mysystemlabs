@@ -1,5 +1,4 @@
-# mysystemlabs
-Teste de conhecimento - Plataforma de aulas de Karatê
+# Plataforma de aulas de Karatê
 
 Para acessar direto pelo site: http://karate-system.herokuapp.com/
 
